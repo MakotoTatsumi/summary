@@ -35,10 +35,10 @@ export const Select: VFC<SelectType> = (props) => {
   return (
     <Root>
       <CategoryButton isActive={isOpen}>
-        <StyledButton disabled={isEdit} type="button" {...getToggleButtonProps()}>
+        <StyledButton disabled={!isEdit} type="button" {...getToggleButtonProps()}>
           {selectedValue || DEFAULT_CATEGORY_TEXT}
         </StyledButton>
-        {!isEdit && selectedItem && <Close onClick={categoryReset}>✗</Close>}
+        {isEdit && selectedItem && <Close onClick={categoryReset}>✗</Close>}
       </CategoryButton>
       <StyledUl isActive={isOpen} {...getMenuProps()}>
         {isOpen &&

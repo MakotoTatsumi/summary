@@ -39,11 +39,6 @@ export const useInitCardData = () => {
   return {
     initCardData,
     resetInitCard,
-    initCardValueProps: {
-      titleValue: initCardData.title,
-      textareaValue: initCardData.content,
-      categoryName: initCardData.category,
-    },
     initCardHandlerProps: {
       handleChangeTextarea: handleChangeInitCardData("content"),
       handleChangeTitle: handleChangeInitCardData("title"),

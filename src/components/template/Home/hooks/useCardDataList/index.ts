@@ -1,20 +1,18 @@
 import produce from "immer"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import { CardData } from "@/domain/cardData"
 import { CategoryDataType } from "@/domain/category"
 import { HandleChangeCardData } from "@components/template/Home/hooks/useCardDataList/types"
+import { addUpdatedAt } from "@components/template/Home/modules/addUpdatedAt"
 import { setLocalStorage } from "@components/template/Home/modules/setLocalStorage"
+import { sortCardDateListByDate } from "@components/template/Home/modules/sortCardDateListByDate"
 
 /**
  * カードリスト内のデータを更新するための処理
  */
 export const useCardDataList = (initData: CardData[]) => {
   const [cardDataList, setCardDataList] = useState<CardData[]>(initData)
-
-  useEffect(() => {
-    setLocalStorage(cardDataList)
-  }, [cardDataList])
 
   /**
    * titleとcontentの値を更新するためのハンドラ
@@ -56,8 +54,31 @@ export const useCardDataList = (initData: CardData[]) => {
    */
   const handleDeleteCardWithPrompt = (id: string) => () => {
     if (window.confirm("本当に削除しますか？")) {
-      setCardDataList((prev) => prev.filter((data) => data.id !== id))
+      setCardDataList((prev) => {
+        const updated = prev.filter((data) => data.id !== id)
+        setLocalStorage(updated)
+        return updated
+      })
     }
+  }
+
+  /**
+   * 編集完了時の処理
+   * @param data
+   * @param id
+   */
+  const handleEditComplete = (data: CardData, id: string) => {
+    setCardDataList((prev) => {
+      const index = prev.findIndex((data) => data.id === id)
+      if (index === -1) return prev
+      const updated = produce(prev, (draft) => {
+        draft[index] = addUpdatedAt(data)
+      })
+
+      const sortedData = sortCardDateListByDate(updated)
+      setLocalStorage(sortedData)
+      return sortedData
+    })
   }
 
   return {
@@ -68,6 +89,7 @@ export const useCardDataList = (initData: CardData[]) => {
       handleChangeTitle: handleChangeCardData("title"),
       handleSelect: handleChangeCategory,
       handleDeleteCardWithPrompt,
+      handleEditComplete,
     },
   }
 }
