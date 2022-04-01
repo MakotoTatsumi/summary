@@ -9,7 +9,7 @@ import { CardType } from "@components/molecules/Card/Card.type"
 export const Card: VFC<CardType> = (props) => {
   const {
     isInitialCard,
-    isEdit,
+    isEdit = false,
     titleValue,
     textareaValue,
     categoryName,
@@ -24,7 +24,7 @@ export const Card: VFC<CardType> = (props) => {
       <InputWrapper>
         <StyledInput disabled={!isEdit} placeholder="Title" value={titleValue} onChange={handleChangeTitle} />
         {(isEdit || categoryName) && (
-          <Select selectList={categoriesData} onSelect={handleSelect} isEdit={!isEdit} selectedValue={categoryName} />
+          <Select selectList={categoriesData} onSelect={handleSelect} isEdit={isEdit} selectedValue={categoryName} />
         )}
       </InputWrapper>
       <StyledTextarea
