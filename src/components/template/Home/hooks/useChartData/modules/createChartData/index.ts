@@ -1,7 +1,7 @@
+import { YearListType } from "@components/template/Home/Home.type"
 import produce from "immer"
 import { pick } from "remeda"
 
-import { YearListType } from "@components/template/Home/Home.type"
 import { CheckedDataType, PopulationDataCache } from "@components/template/Home/hooks/useChartData/types"
 
 /**

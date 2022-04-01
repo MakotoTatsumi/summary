@@ -1,12 +1,14 @@
+
+import { ChartDataType, YearListType } from "@components/template/Home/Home.type"
 import { useEffect, useState } from "react"
 
-import { getPopulation } from "@/api/resas/getPopulation"
-import { ChartDataType, YearListType } from "@components/template/Home/Home.type"
 import { convertToCachedData } from "@components/template/Home/hooks/useChartData/modules/convertToCachedData"
 import { createChartData } from "@components/template/Home/hooks/useChartData/modules/createChartData"
 import { generateRandomColorCode } from "@components/template/Home/hooks/useChartData/modules/generateRandomColorCode"
 import { getTotalPopulationData } from "@components/template/Home/hooks/useChartData/modules/getTotalPopulationData"
 import { CheckedDataType, PopulationDataCache } from "@components/template/Home/hooks/useChartData/types"
+
+import { getPopulation } from "@/api/resas/getPopulation"
 
 export const useChartData = () => {
   const [checked, setChecked] = useState<CheckedDataType[]>([])

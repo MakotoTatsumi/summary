@@ -1,5 +1,6 @@
-import { Population } from "@/libs/apiClient/resas/@types"
 import { getTotalPopulationData } from "@components/template/Home/hooks/useChartData/modules/getTotalPopulationData/index"
+
+import { Population } from "@/libs/apiClient/resas/@types"
 
 describe("getTotalPopulationData", () => {
   it("Dataが存在する場合", () => {
