@@ -8,6 +8,10 @@ const Meta: ComponentMeta<typeof Home> = {
   component: Home,
 }
 
-export const Base: HomeStoryObj = {}
+export const Base: HomeStoryObj = {
+  args: {
+    initData: [],
+  },
+}
 
 export default Meta

@@ -65,11 +65,10 @@ const Root = styled.div`
 const CategoryButton = styled.div<{ isActive: boolean }>`
   background-color: ${COLOR_FF6B6E};
   transition: ease 0.3s;
-  padding: 4px;
-  width: 120px;
+  padding: 4px 10px;
+  min-width: 80px;
   height: 30px;
-  border-radius: 15px;
-  opacity: 0.8;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,8 +76,6 @@ const CategoryButton = styled.div<{ isActive: boolean }>`
   ${({ isActive }) =>
     isActive &&
     css`
-      opacity: 0.2;
-      border: 1px solid ${COLOR_C5C9C6};
       color: ${COLOR_CCCCCC};
       cursor: auto;
     `}

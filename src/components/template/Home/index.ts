@@ -1,2 +1,2 @@
 export * from "./Home"
-export * from "./const/category"
+export * from "./const/optionData"

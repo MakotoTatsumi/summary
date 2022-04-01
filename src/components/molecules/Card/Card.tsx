@@ -31,34 +31,37 @@ export const Card: VFC<CardType> = (props) => {
   }
 
   return (
-    <Root isEdit={isEdit}>
+    <Root isEdit={!isInitialCard && isEdit}>
       <InputWrapper>
-        <StyledInput disabled={!isEdit} placeholder="Title" value={title} onChange={handleChangeTitle} />
-        {(isEdit || category) && (
-          <Select selectList={categoriesData} onSelect={handleSelect} isEdit={isEdit} selectedValue={category} />
-        )}
+        <StyledInput disabled={!isEdit} placeholder="No Title" value={title} onChange={handleChangeTitle} />
       </InputWrapper>
       <StyledTextarea disabled={!isEdit} placeholder="Description" value={content} onChange={handleChangeTextarea} />
-      {!isInitialCard && (
-        <Edit>
-          <EditIcon>
+
+      <BottomArea>
+        {(isEdit || category) && (
+          <SelectWrapper>
+            <Select selectList={categoriesData} onSelect={handleSelect} isEdit={isEdit} selectedValue={category} />
+          </SelectWrapper>
+        )}
+        {!isInitialCard && (
+          <Edit>
             {isEdit ? (
-              <div onClick={() => handleEditCompleteAndFinishEdit(data, id)}>
+              <StyledIcon onClick={() => handleEditCompleteAndFinishEdit(data, id)}>
                 <IconCheck />
-              </div>
+              </StyledIcon>
             ) : (
               <EditIconNotEdditing>
-                <div onClick={handleDeleteCardData}>
+                <StyledIcon onClick={handleDeleteCardData}>
                   <IconTrash />
-                </div>
-                <div onClick={handleEditStart}>
+                </StyledIcon>
+                <StyledIcon onClick={handleEditStart}>
                   <IconPen />
-                </div>
+                </StyledIcon>
               </EditIconNotEdditing>
             )}
-          </EditIcon>
-        </Edit>
-      )}
+          </Edit>
+        )}
+      </BottomArea>
     </Root>
   )
 }
@@ -66,19 +69,22 @@ export const Card: VFC<CardType> = (props) => {
 const Root = styled.div<{ isEdit: boolean }>`
   border-radius: 4px;
   border: 1px solid #cbd6d6;
-  height: 200px;
+  height: 300px;
   width: 100%;
   padding: 20px;
-  box-shadow: 0px 0px 3px 3px rgba(149, 163, 163, 0.1);
+  position: relative;
   display: flex;
   flex-direction: column;
-  transition: all ease 0.3s;
+  transition: box-shadow ease 0.3s;
+
   ${({ isEdit }) =>
     isEdit &&
     css`
-      box-shadow: 0px 0px 5px 5px rgba(149, 163, 163, 0.5);
+      box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
     `}
 `
+
+const SelectWrapper = styled.div``
 
 const InputWrapper = styled.div`
   margin-bottom: 10px;
@@ -124,13 +130,21 @@ const StyledTextarea = styled.textarea`
   }
 `
 
-const Edit = styled.div`
-  display: inline-flex;
-  justify-content: right;
+const BottomArea = styled.div`
+  display: flex;
+  justify-content: space-between;
 `
 
-const EditIcon = styled.div`
+const Edit = styled.div`
+  display: flex;
+  justify-content: right;
+  margin-left: auto;
+`
+
+const StyledIcon = styled.div`
   cursor: pointer;
+  display: flex;
+  align-items: center;
 `
 
 const EditIconNotEdditing = styled.div`

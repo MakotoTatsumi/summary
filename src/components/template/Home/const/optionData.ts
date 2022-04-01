@@ -3,3 +3,5 @@ export const DEFAULT_CATEGORY = [
   { id: "CATEGORY_2", value: "作業中" },
   { id: "CATEGORY_3", value: "アーカイブ" },
 ] as const
+
+export type CATEGORY_TYPE = typeof DEFAULT_CATEGORY[number]["value"]

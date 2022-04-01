@@ -18,7 +18,7 @@ export const Base: CardStoryObj = {
       id: "22257705-e6b3-4e18-b830-67a5114a7579",
       title: "1番目作成",
       content: "",
-      category: "",
+      category: "お気に入り",
       updatedAt: 1648832216218,
     },
   },
