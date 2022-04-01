@@ -1,3 +1,4 @@
+import { CardData } from "@/domain/cardData"
 import { CategoryDataType } from "@/domain/category"
 import { AnyFunction } from "@shared/types/common"
 
@@ -15,12 +16,11 @@ import { AnyFunction } from "@shared/types/common"
 export type CardType = {
   isInitialCard?: boolean
   isEdit?: boolean
-  titleValue: string
-  textareaValue: string
-  categoryName: string
+  data: CardData
   categoriesData: CategoryDataType[]
   handleChangeTitle: AnyFunction
   handleChangeTextarea: AnyFunction
   handleSelect: AnyFunction
   handleDeleteCardData?: AnyFunction
+  handleEditComplete?: AnyFunction
 }

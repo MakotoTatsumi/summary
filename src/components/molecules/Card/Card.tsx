@@ -1,6 +1,7 @@
 import { useState, VFC } from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
+import { CardData } from "@/domain/cardData"
 import { IconCheck } from "@components/atoms/Icons/IconCheck"
 import { IconPen } from "@components/atoms/Icons/IconPen"
 import { IconTrash } from "@components/atoms/Icons/IconTrash"
@@ -10,56 +11,44 @@ import { CardType } from "@components/molecules/Card/Card.type"
 export const Card: VFC<CardType> = (props) => {
   const {
     isInitialCard,
-    isEdit = false,
-    titleValue,
-    textareaValue,
-    categoryName,
+    data,
+    data: { id, title, category, content },
     categoriesData,
     handleChangeTextarea,
     handleChangeTitle,
     handleSelect,
     handleDeleteCardData,
+    handleEditComplete,
   } = props
 
-  const [isCardEdit, setIsCardEdit] = useState(isEdit)
+  const [isEdit, setIsEdit] = useState(isInitialCard || false)
 
-  const handleEditStart = () => setIsCardEdit(false)
-  const handleEditDone = () => {
-    setIsCardEdit(true)
-  }
-  const handleDeleteCard = () => {
-    if (handleDeleteCardData) handleDeleteCardData()
+  const handleEditStart = () => setIsEdit(true)
+
+  const handleEditCompleteAndFinishEdit = (data: CardData, id: string) => {
+    if (handleEditComplete) handleEditComplete(data, id)
+    setIsEdit(false)
   }
 
   return (
-    <Root>
+    <Root isEdit={isEdit}>
       <InputWrapper>
-        <StyledInput disabled={isCardEdit} placeholder="Title" value={titleValue} onChange={handleChangeTitle} />
-        {(!isCardEdit || categoryName) && (
-          <Select
-            selectList={categoriesData}
-            onSelect={handleSelect}
-            isEdit={isCardEdit}
-            selectedValue={categoryName}
-          />
+        <StyledInput disabled={!isEdit} placeholder="Title" value={title} onChange={handleChangeTitle} />
+        {(isEdit || category) && (
+          <Select selectList={categoriesData} onSelect={handleSelect} isEdit={isEdit} selectedValue={category} />
         )}
       </InputWrapper>
-      <StyledTextarea
-        disabled={isCardEdit}
-        placeholder="Description"
-        value={textareaValue}
-        onChange={handleChangeTextarea}
-      />
+      <StyledTextarea disabled={!isEdit} placeholder="Description" value={content} onChange={handleChangeTextarea} />
       {!isInitialCard && (
         <Edit>
           <EditIcon>
-            {!isCardEdit ? (
-              <div onClick={handleEditDone}>
+            {isEdit ? (
+              <div onClick={() => handleEditCompleteAndFinishEdit(data, id)}>
                 <IconCheck />
               </div>
             ) : (
               <EditIconNotEdditing>
-                <div onClick={handleDeleteCard}>
+                <div onClick={handleDeleteCardData}>
                   <IconTrash />
                 </div>
                 <div onClick={handleEditStart}>
@@ -74,7 +63,7 @@ export const Card: VFC<CardType> = (props) => {
   )
 }
 
-const Root = styled.div`
+const Root = styled.div<{ isEdit: boolean }>`
   border-radius: 4px;
   border: 1px solid #cbd6d6;
   height: 200px;
@@ -83,6 +72,12 @@ const Root = styled.div`
   box-shadow: 0px 0px 3px 3px rgba(149, 163, 163, 0.1);
   display: flex;
   flex-direction: column;
+  transition: all ease 0.3s;
+  ${({ isEdit }) =>
+    isEdit &&
+    css`
+      box-shadow: 0px 0px 5px 5px rgba(149, 163, 163, 0.5);
+    `}
 `
 
 const InputWrapper = styled.div`
