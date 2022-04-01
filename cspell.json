@@ -1,7 +1,7 @@
 {
   "version": "0.1",
   "language": "en",
-  "dictionaries": ["library", "web", "typescript", "html", "css"],
+  "dictionaries": ["library", "web", "other", "typescript", "html", "css"],
   "dictionaryDefinitions": [
     {
       "name": "library",
@@ -10,6 +10,10 @@
     {
       "name": "web",
       "path": "./configs/cspell/web.txt"
+    },
+    {
+      "name": "other",
+      "path": "./configs/cspell/other.txt"
     }
   ],
   "ignorePaths": ["node_modules/**", "./src/libs/**"]
