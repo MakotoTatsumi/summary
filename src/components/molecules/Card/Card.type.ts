@@ -22,4 +22,5 @@ export type CardType = {
   handleChangeTitle: AnyFunction
   handleChangeTextarea: AnyFunction
   handleSelect: AnyFunction
+  handleDeleteCardData?: AnyFunction
 }

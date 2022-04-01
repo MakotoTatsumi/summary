@@ -1,8 +1,9 @@
-import { VFC } from "react"
+import { useState, VFC } from "react"
 import styled from "styled-components"
 
 import { IconCheck } from "@components/atoms/Icons/IconCheck"
 import { IconPen } from "@components/atoms/Icons/IconPen"
+import { IconTrash } from "@components/atoms/Icons/IconTrash"
 import { Select } from "@components/atoms/Select"
 import { CardType } from "@components/molecules/Card/Card.type"
 
@@ -17,25 +18,56 @@ export const Card: VFC<CardType> = (props) => {
     handleChangeTextarea,
     handleChangeTitle,
     handleSelect,
+    handleDeleteCardData,
   } = props
+
+  const [isCardEdit, setIsCardEdit] = useState(isEdit)
+
+  const handleEditStart = () => setIsCardEdit(false)
+  const handleEditDone = () => {
+    setIsCardEdit(true)
+  }
+  const handleDeleteCard = () => {
+    if (handleDeleteCardData) handleDeleteCardData()
+  }
 
   return (
     <Root>
       <InputWrapper>
-        <StyledInput disabled={!isEdit} placeholder="Title" value={titleValue} onChange={handleChangeTitle} />
-        {(isEdit || categoryName) && (
-          <Select selectList={categoriesData} onSelect={handleSelect} isEdit={isEdit} selectedValue={categoryName} />
+        <StyledInput disabled={isCardEdit} placeholder="Title" value={titleValue} onChange={handleChangeTitle} />
+        {(!isCardEdit || categoryName) && (
+          <Select
+            selectList={categoriesData}
+            onSelect={handleSelect}
+            isEdit={isCardEdit}
+            selectedValue={categoryName}
+          />
         )}
       </InputWrapper>
       <StyledTextarea
-        disabled={!isEdit}
+        disabled={isCardEdit}
         placeholder="Description"
         value={textareaValue}
         onChange={handleChangeTextarea}
       />
       {!isInitialCard && (
         <Edit>
-          <EditIcon>{isEdit ? <IconCheck /> : <IconPen />}</EditIcon>
+          <EditIcon>
+            {!isCardEdit ? (
+              <div onClick={handleEditDone}>
+                <IconCheck />
+              </div>
+            ) : (
+              <EditIconNotEdditing>
+                <div onClick={handleDeleteCard}>
+                  <IconTrash />
+                </div>
+                <div onClick={handleEditStart}>
+                  <IconPen />
+                </div>
+              </EditIconNotEdditing>
+            )}
+          </EditIcon>
         </Edit>
       )}
     </Root>
@@ -104,4 +136,9 @@ const Edit = styled.div`
 
 const EditIcon = styled.div`
   cursor: pointer;
+`
+
+const EditIconNotEdditing = styled.div`
+  display: flex;
+  gap: 15px;
 `
