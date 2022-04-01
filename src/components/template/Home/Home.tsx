@@ -1,91 +1,19 @@
-import produce from "immer"
-import { ChangeEventHandler, useState } from "react"
 import styled from "styled-components"
 
-import { CardData } from "@/domain/cardData"
-import { CategoryDataType } from "@/domain/category"
 import { Button } from "@components/atoms/Button"
 import { Card } from "@components/molecules/Card"
 import { DEFAULT_CATEGORY } from "@components/template/Home/const/category"
-
-const InitialData = { id: "", title: "", content: "", category: "", time: "" }
-
-type HandlerType = keyof Pick<CardData, "title" | "content">
-type HandleInitChangeCardData = (key: HandlerType) => ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
-type HandleChangeCardData = (
-  key: HandlerType,
-) => (id: string) => ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
+import { useCardDataList } from "@components/template/Home/hooks/useCardDataList"
+import { useInitCardData } from "@components/template/Home/hooks/useInitCardData"
 
 export const Home = () => {
-  /**
-   * Init Card Data
-   */
-  const [initCardData, setInitCardData] = useState<CardData>(InitialData)
-  const cardValueProps = {
-    titleValue: initCardData.title,
-    textareaValue: initCardData.content,
-    categoryName: initCardData.category,
-  }
-
-  const handleChangeInitCardData: HandleInitChangeCardData = (key: HandlerType) => (event) => {
-    setInitCardData((prev) => ({
-      ...prev,
-      [key]: event.target.value,
-    }))
-  }
-
-  const handleChangeInitCardCategory = (selectItem: CategoryDataType) => {
-    setInitCardData((prev) => ({
-      ...prev,
-      category: selectItem?.value || "",
-    }))
-  }
-
-  const initCardHandlerProps = {
-    handleChangeTextarea: handleChangeInitCardData("content"),
-    handleChangeTitle: handleChangeInitCardData("title"),
-    handleSelect: handleChangeInitCardCategory,
-  }
-
-  /**
-   * Card Data
-   */
-  const [cardDataList, setCardDataList] = useState<CardData[]>([])
-
-  const handleChangeCardData: HandleChangeCardData = (key) => (id) => (event) => {
-    setCardDataList((prev) => {
-      const index = prev.findIndex((data) => data.id === id)
-      if (!index) return prev
-
-      return produce(prev, (draft) => {
-        draft[index][key] = event.target.value
-      })
-    })
-  }
-
-  const handleChangeCategory = (id: string) => (selectItem: CategoryDataType) => {
-    setCardDataList((prev) => {
-      const index = prev.findIndex((data) => data.id === id)
-      if (!index) return prev
-
-      return produce(prev, (draft) => {
-        draft[index]["category"] = selectItem.value
-      })
-    })
-  }
-
-  const cardHandlerProps = {
-    handleChangeTextarea: handleChangeCardData("content"),
-    handleChangeTitle: handleChangeCardData("title"),
-    handleSelect: handleChangeCategory,
-  }
+  const { initCardData, resetInitCard, initCardHandlerProps, initCardValueProps } = useInitCardData()
+  const { cardDataList, setCardDataList, cardHandlerProps } = useCardDataList()
 
   const handleAddNewCard = () => {
     setCardDataList((prev) => [initCardData, ...prev])
-    setInitCardData(InitialData)
+    resetInitCard()
   }
-
-  console.log(cardDataList)
 
   return (
     <Root>
@@ -94,7 +22,7 @@ export const Home = () => {
           isInitialCard
           isEdit
           categoriesData={[...DEFAULT_CATEGORY]}
-          {...cardValueProps}
+          {...initCardValueProps}
           {...initCardHandlerProps}
         />
         <ButtonWrapper>
@@ -104,15 +32,16 @@ export const Home = () => {
 
       <CardList>
         {cardDataList.map((data) => (
-          <Card
-            key={data.id}
-            isEdit
-            categoriesData={[...DEFAULT_CATEGORY]}
-            titleValue={data.title}
-            textareaValue={data.content}
-            categoryName={data.category}
-            {...cardHandlerProps}
-          />
+          <CardListItem key={data.id}>
+            <Card
+              isEdit
+              categoriesData={[...DEFAULT_CATEGORY]}
+              titleValue={data.title}
+              textareaValue={data.content}
+              categoryName={data.category}
+              {...cardHandlerProps}
+            />
+          </CardListItem>
         ))}
       </CardList>
     </Root>
@@ -137,4 +66,10 @@ const ButtonWrapper = styled.div`
 
 const CardList = styled.ul`
   margin-top: 40px;
+`
+
+const CardListItem = styled.li`
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
 `
