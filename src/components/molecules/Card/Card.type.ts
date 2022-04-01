@@ -14,7 +14,7 @@ import { AnyFunction } from "@shared/types/common"
  */
 export type CardType = {
   isInitialCard?: boolean
-  isEdit: boolean
+  isEdit?: boolean
   titleValue: string
   textareaValue: string
   categoryName: string
