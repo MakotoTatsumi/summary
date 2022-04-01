@@ -1,6 +1,6 @@
 import React from "react"
-import { Reset } from "styled-reset"
 import { INITIAL_VIEWPORTS } from "@storybook/addon-viewport"
+import "./reset.css"
 
 export const globalTypes = {
   reset: {
@@ -15,7 +15,7 @@ export const globalTypes = {
 }
 
 export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
+  actions: { argTypesRegex: "^(handle|on|dispatch)[A-Z].*" },
   viewport: {
     viewports: INITIAL_VIEWPORTS,
   },
@@ -28,7 +28,7 @@ export const parameters = {
   decorators: [
     (Story) => (
       <>
-        <Reset />
+        <GlobalStyle />
         <Story />
       </>
     ),
