@@ -2,15 +2,15 @@ import produce from "immer"
 import { ChangeEventHandler, useState } from "react"
 import styled from "styled-components"
 
+import { CardData } from "@/domain/cardData"
 import { CategoryDataType } from "@/domain/category"
-import { TodoItemData } from "@/domain/totoItemData"
 import { Button } from "@components/atoms/Button"
 import { Card } from "@components/molecules/Card"
 import { DEFAULT_CATEGORY } from "@components/template/Home/const/category"
 
 const InitialData = { id: "", title: "", content: "", category: "", time: "" }
 
-type HandlerType = keyof Pick<TodoItemData, "title" | "content">
+type HandlerType = keyof Pick<CardData, "title" | "content">
 type HandleInitChangeCardData = (key: HandlerType) => ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
 type HandleChangeCardData = (
   key: HandlerType,
@@ -20,22 +20,22 @@ export const Home = () => {
   /**
    * Init Card Data
    */
-  const [initTodoData, setInitTodoData] = useState<TodoItemData>(InitialData)
+  const [initCardData, setInitCardData] = useState<CardData>(InitialData)
   const cardValueProps = {
-    titleValue: initTodoData.title,
-    textareaValue: initTodoData.content,
-    categoryName: initTodoData.category,
+    titleValue: initCardData.title,
+    textareaValue: initCardData.content,
+    categoryName: initCardData.category,
   }
 
   const handleChangeInitCardData: HandleInitChangeCardData = (key: HandlerType) => (event) => {
-    setInitTodoData((prev) => ({
+    setInitCardData((prev) => ({
       ...prev,
       [key]: event.target.value,
     }))
   }
 
   const handleChangeInitCardCategory = (selectItem: CategoryDataType) => {
-    setInitTodoData((prev) => ({
+    setInitCardData((prev) => ({
       ...prev,
       category: selectItem?.value || "",
     }))
@@ -50,7 +50,7 @@ export const Home = () => {
   /**
    * Card Data
    */
-  const [cardDataList, setCardDataList] = useState<TodoItemData[]>([])
+  const [cardDataList, setCardDataList] = useState<CardData[]>([])
 
   const handleChangeCardData: HandleChangeCardData = (key) => (id) => (event) => {
     setCardDataList((prev) => {
@@ -81,8 +81,8 @@ export const Home = () => {
   }
 
   const handleAddNewCard = () => {
-    setCardDataList((prev) => [initTodoData, ...prev])
-    setInitTodoData(InitialData)
+    setCardDataList((prev) => [initCardData, ...prev])
+    setInitCardData(InitialData)
   }
 
   console.log(cardDataList)

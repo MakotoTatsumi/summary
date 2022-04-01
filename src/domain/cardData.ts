@@ -1,4 +1,4 @@
-export type TodoItemData = {
+export type CardData = {
   id: string
   time: string
   title: string
